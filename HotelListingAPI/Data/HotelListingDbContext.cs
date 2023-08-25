@@ -47,12 +47,20 @@ namespace HotelListingAPI.Data
                 },
                 new Hotel
                 {
-                    Id = 1,
-                    Name = "Grand Hyatt",
-                    Address = "BGC",
-                    CountryId = 1,
-                    Rating = 4.8
+                    Id = 2,
+                    Name = "Ritz Hotel",
+                    Address = "New York",
+                    CountryId = 2,
+                    Rating = 5.0
                 },
+                new Hotel
+                {
+                    Id = 3,
+                    Name = "Azure",
+                    Address = "Kyoto",
+                    CountryId = 3,
+                    Rating = 4.0
+                }
                 );
         }
         //Then run below in the Packager Manager Console.(Tools -> Nuget Packager Manager->Package Manager Console. 

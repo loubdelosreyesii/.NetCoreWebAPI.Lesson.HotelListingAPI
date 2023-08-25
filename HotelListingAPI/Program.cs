@@ -24,7 +24,8 @@ builder.Services.AddCors(
             b => b.AllowAnyHeader()
                 .AllowAnyOrigin()
                 .AllowAnyMethod());
-    });
+});
+
 //Lesson 2 : Add Serilog 
 builder.Host.UseSerilog((ctx,lc)=>lc.WriteTo.Console().ReadFrom.Configuration(ctx.Configuration));
 
