@@ -13,8 +13,10 @@ namespace HotelListingAPI.Controllers
     [ApiController]
     public class CountriesController : ControllerBase
     {
+        //this is the copy of your database.
         private readonly HotelListingDbContext _context;
 
+        //initialize the database.
         public CountriesController(HotelListingDbContext context)
         {
             _context = context;
