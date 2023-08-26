@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HotelListingAPI.Data;
 using HotelListingAPI.Models.Country;
+using AutoMapper;
 
 namespace HotelListingAPI.Controllers
 {
@@ -16,11 +17,13 @@ namespace HotelListingAPI.Controllers
     {
         //this is the copy of your database.
         private readonly HotelListingDbContext _context;
+        private readonly IMapper _mapper;
 
         //initialize the database.
-        public CountriesController(HotelListingDbContext context)
+        public CountriesController(HotelListingDbContext context,IMapper mapper)
         {
             _context = context;
+            this._mapper = mapper;
         }
 
         // GET: api/Countries
@@ -89,18 +92,20 @@ namespace HotelListingAPI.Controllers
         // POST: api/Countries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Country>> PostCountry(CreateCountryDto createCountry)
+        public async Task<ActionResult<Country>> PostCountry(CreateCountryDto createCountryDto)
         {
             if (_context.Countries == null)
             {
                 return Problem("Entity set 'HotelListingDbContext.Countries'  is null.");
             }
 
-            var country = new Country
-            {
-                Name = createCountry.Name,
-                ShortName = createCountry.ShortName
-            };
+            //var country = new Country
+            //{
+            //    Name = createCountry.Name,
+            //    ShortName = createCountry.ShortName
+            //};
+            //implementation of automapper for an database table.
+            var country = _mapper.Map<Country>(createCountryDto);  
 
             _context.Countries.Add(country);
             await _context.SaveChangesAsync();
