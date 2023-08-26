@@ -26,11 +26,14 @@ namespace HotelListingAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Country>>> GetCountries()
         {
-          if (_context.Countries == null)
-          {
-              return NotFound();
-          }
-            return await _context.Countries.ToListAsync();
+            var countries = await _context.Countries.ToListAsync();
+
+            if (countries == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(countries);
         }
 
         // GET: api/Countries/5
@@ -48,7 +51,7 @@ namespace HotelListingAPI.Controllers
                 return NotFound();
             }
 
-            return country;
+            return Ok(country);
         }
 
         // PUT: api/Countries/5
@@ -58,7 +61,7 @@ namespace HotelListingAPI.Controllers
         {
             if (id != country.Id)
             {
-                return BadRequest();
+                return BadRequest("Invalid Record Id");
             }
 
             _context.Entry(country).State = EntityState.Modified;
