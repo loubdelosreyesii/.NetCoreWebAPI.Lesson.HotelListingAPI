@@ -52,30 +52,40 @@ namespace HotelListingAPI.Controllers
                 return NotFound();
             }
             var country = await _context.Countries
-                .Include(p => p.Hotels)
-                .FirstOrDefaultAsync(p => p.Id == id);
+                .Include(p => p.Hotels) //include record in the child table for display
+                .FirstOrDefaultAsync(p => p.Id == id); 
 
             if (country == null)
             {
                 return NotFound();
             }
-
+            
             var countryDto = _mapper.Map<CountryDto>(country);
+
             return Ok(countryDto);
         }
 
         // PUT: api/Countries/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCountry(int id, Country country)
+        public async Task<IActionResult> PutCountry(int id, UpdateCountryDto updateCountryDto)
         {
-            if (id != country.Id)
+
+            if (id != updateCountryDto.Id)
             {
                 return BadRequest("Invalid Record Id");
             }
+            //_context.Entry(country).State = EntityState.Modified;
+            var country = await _context.Countries.FindAsync(id);
 
-            _context.Entry(country).State = EntityState.Modified;
+            if (country == null)
+            {
+                return NotFound();
+            }
 
+            _mapper.Map(updateCountryDto,country);
+            //No need to add the below code due to mapper will do the updates to the model.
+            //_context.Entry(country).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
