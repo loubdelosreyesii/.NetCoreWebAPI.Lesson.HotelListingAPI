@@ -2,6 +2,7 @@ using HotelListingAPI.Configurations;
 using HotelListingAPI.Contracts;
 using HotelListingAPI.Data;
 using HotelListingAPI.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -37,6 +38,13 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ICountriesRepository,CountriesRepository>();
 builder.Services.AddScoped<IHotelsRepository,HotelsRepository>();
+//Adding IdentityCore
+//1. Add Nuget Package : Microsoft.AspNetCore.Identity.FrameworkCore
+//2. Add the line of code below
+//3. Use IdentityUser or customer UserClass in the AddIdentityCore<>
+builder.Services.AddIdentityCore<ApiUser>()
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<HotelListingDbContext>();
 
 var app = builder.Build();
 
