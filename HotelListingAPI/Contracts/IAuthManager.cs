@@ -7,5 +7,6 @@ namespace HotelListingAPI.Contracts
     {
         Task<IEnumerable<IdentityError>> Reqister(ApiUserDto userDto);
 
+        Task<bool> Login(LoginDto userDto);
     }
 }

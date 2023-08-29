@@ -40,5 +40,25 @@ namespace HotelListingAPI.Controllers
             
             return Ok();
         }
+
+        // location wille be : POST: api/Account/login 
+        [HttpPost]
+        [Route("login")]//naming the route
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        //FromBody : param should be expected in the body parameters only.
+        public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
+        {
+            var isValidUser = await _authManager.Login(loginDto);
+
+            if (!isValidUser)
+            { 
+                return Unauthorized(); //Status Code 401
+            }
+
+            return Ok();
+        }
+
     }
 }
