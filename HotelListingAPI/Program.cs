@@ -38,6 +38,7 @@ builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ICountriesRepository,CountriesRepository>();
 builder.Services.AddScoped<IHotelsRepository,HotelsRepository>();
+builder.Services.AddScoped<IAuthManager, AuthManager>();
 //Adding IdentityCore
 //1. Add Nuget Package : Microsoft.AspNetCore.Identity.FrameworkCore
 //2. Add the line of code below
