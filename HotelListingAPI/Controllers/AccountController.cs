@@ -60,5 +60,24 @@ namespace HotelListingAPI.Controllers
             return Ok(authResponse);
         }
 
+        // location wille be : POST: api/Account/refresh 
+        [HttpPost]
+        [Route("refreshtoken")]//naming the route
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        //FromBody : param should be expected in the body parameters only.
+        public async Task<ActionResult> RefreshToken([FromBody] AuthResponseDto request)
+        {
+            var authResponse = await _authManager.VerifyRefreshToken(request);
+
+            if (authResponse == null)
+            {
+                return Unauthorized(); //Status Code 401
+            }
+
+            return Ok(authResponse);
+        }
+
     }
 }

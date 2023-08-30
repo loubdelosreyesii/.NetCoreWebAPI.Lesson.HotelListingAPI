@@ -9,6 +9,7 @@ using HotelListingAPI.Data;
 using HotelListingAPI.Models.Country;
 using AutoMapper;
 using HotelListingAPI.Contracts;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HotelListingAPI.Controllers
 {
@@ -42,7 +43,6 @@ namespace HotelListingAPI.Controllers
 
             return Ok(records);
         }
-
         // GET: api/Countries/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CountryDto>> GetCountry(int id)
@@ -58,13 +58,12 @@ namespace HotelListingAPI.Controllers
 
             return Ok(countryDto);
         }
-
         // PUT: api/Countries/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> PutCountry(int id, UpdateCountryDto updateCountryDto)
         {
-
             if (id != updateCountryDto.Id)
             {
                 return BadRequest("Invalid Record Id");
@@ -96,10 +95,10 @@ namespace HotelListingAPI.Controllers
 
             return NoContent();
         }
-
         // POST: api/Countries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<CreateCountryDto>> PostCountry(CreateCountryDto createCountryDto)
         {
             var country = _mapper.Map<Country>(createCountryDto);  
@@ -108,9 +107,9 @@ namespace HotelListingAPI.Controllers
 
             return CreatedAtAction("GetCountry", new { id = country.Id }, country);
         }
-
         // DELETE: api/Countries/5
         [HttpDelete("{id}")]
+        [Authorize(Roles="Administrator")]
         public async Task<IActionResult> DeleteCountry(int id)
         {
             var country = await _countriesRepository.GetAsync(id);
