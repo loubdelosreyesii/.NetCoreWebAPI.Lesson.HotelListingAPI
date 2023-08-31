@@ -30,28 +30,18 @@ namespace HotelListingAPI.Controllers
         {
             _logger.LogInformation($"Registration Attempt for {apiUserDto.Email}");
 
-            try
-            {
-                var errors = await _authManager.Reqister(apiUserDto);
+            var errors = await _authManager.Reqister(apiUserDto);
 
-                if (errors.Any())
-                { 
-                    foreach (var error in errors)
-                    {
-                        ModelState.AddModelError(error.Code,error.Description);
-                    }
+            if (errors.Any())
+            { 
+                foreach (var error in errors)
+                {
+                    ModelState.AddModelError(error.Code,error.Description);
+                }
 
-                    return BadRequest(ModelState);
+                return BadRequest(ModelState);
             }
             return Ok();
-            }
-            catch (Exception ex)
-            {
-                string errorMessage = $"Something went wrong in the {nameof(Register)} - User Registration attempt for {apiUserDto.Email} : Details : { ex.ToString() }";
-
-                _logger.LogError(errorMessage);
-                return Problem(errorMessage, statusCode: 500);
-            }
         }
 
         // location wille be : POST: api/Account/login 
@@ -65,25 +55,14 @@ namespace HotelListingAPI.Controllers
         {
             _logger.LogInformation($"Login Attempty for {loginDto.Email}");
 
-            try
-            {
-                var authResponse = await _authManager.Login(loginDto);
+            var authResponse = await _authManager.Login(loginDto);
 
-                if (authResponse == null)
-                { 
-                    return Unauthorized(); //Status Code 401
-                }
-
-                return Ok(authResponse);
-            }
-            catch (Exception ex)
-            {
-                string errorMessage = $"Something went wrong in the {nameof(Login)}- Login attempt for {loginDto.Email} : Details :{ex.ToString()}";
-                
-                _logger.LogError(errorMessage);
-                return Problem(errorMessage, statusCode:500);
+            if (authResponse == null)
+            { 
+                return Unauthorized(); //Status Code 401
             }
 
+            return Ok(authResponse);
         }
 
         // location wille be : POST: api/Account/refresh 
