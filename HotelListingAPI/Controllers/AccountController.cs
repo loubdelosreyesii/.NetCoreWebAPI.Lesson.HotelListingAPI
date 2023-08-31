@@ -11,10 +11,12 @@ namespace HotelListingAPI.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAuthManager _authManager;
+        private readonly ILogger<AccountController> _logger;
 
-        public AccountController(IAuthManager authManager)
+        public AccountController(IAuthManager authManager, ILogger<AccountController> logger)
         {
             this._authManager = authManager;
+            this._logger = logger;
         }
 
         // location wille be : POST: api/Account/register 
@@ -26,19 +28,30 @@ namespace HotelListingAPI.Controllers
         //FromBody : param should be expected in the body parameters only.
         public async Task<ActionResult> Register([FromBody] ApiUserDto apiUserDto) 
         {
-            var errors = await _authManager.Reqister(apiUserDto);
+            _logger.LogInformation($"Registration Attempt for {apiUserDto.Email}");
 
-            if (errors.Any())
-            { 
-                foreach (var error in errors)
-                {
-                    ModelState.AddModelError(error.Code,error.Description);
-                }
+            try
+            {
+                var errors = await _authManager.Reqister(apiUserDto);
 
-                return BadRequest(ModelState);
+                if (errors.Any())
+                { 
+                    foreach (var error in errors)
+                    {
+                        ModelState.AddModelError(error.Code,error.Description);
+                    }
+
+                    return BadRequest(ModelState);
             }
-            
             return Ok();
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = $"Something went wrong in the {nameof(Register)} - User Registration attempt for {apiUserDto.Email} : Details : { ex.ToString() }";
+
+                _logger.LogError(errorMessage);
+                return Problem(errorMessage, statusCode: 500);
+            }
         }
 
         // location wille be : POST: api/Account/login 
@@ -50,14 +63,27 @@ namespace HotelListingAPI.Controllers
         //FromBody : param should be expected in the body parameters only.
         public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
         {
-            var authResponse = await _authManager.Login(loginDto);
+            _logger.LogInformation($"Login Attempty for {loginDto.Email}");
 
-            if (authResponse == null)
-            { 
-                return Unauthorized(); //Status Code 401
+            try
+            {
+                var authResponse = await _authManager.Login(loginDto);
+
+                if (authResponse == null)
+                { 
+                    return Unauthorized(); //Status Code 401
+                }
+
+                return Ok(authResponse);
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = $"Something went wrong in the {nameof(Login)}- Login attempt for {loginDto.Email} : Details :{ex.ToString()}";
+                
+                _logger.LogError(errorMessage);
+                return Problem(errorMessage, statusCode:500);
             }
 
-            return Ok(authResponse);
         }
 
         // location wille be : POST: api/Account/refresh 
