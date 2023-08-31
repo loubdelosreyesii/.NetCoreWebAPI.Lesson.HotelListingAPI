@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Serilog;
 using System.Text;
 
@@ -94,6 +95,12 @@ builder.Services.AddAuthentication(options =>
         };
     }
 );
+//Add Response Caching
+builder.Services.AddResponseCaching(options => 
+{
+    options.MaximumBodySize = 1024; //largest cacheable to be allowed.
+    options.UseCaseSensitivePaths = true; //if somebody request
+});
 
 var app = builder.Build();
 
@@ -106,6 +113,24 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<ExceptionMiddleware>();
 
+//this 2 lines of codes should be declare after adding the Cors.
+app.UseResponseCaching(); //enabling the middleware
+
+//creating the middleware instructions
+app.Use(async(context, next)=>
+{
+    //adding values to the cache headers
+    context.Response.GetTypedHeaders().CacheControl = new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+    {
+        Public = true,
+        MaxAge = TimeSpan.FromSeconds(10),
+    };
+
+    //use to vary the cache response. 
+    context.Response.Headers[HeaderNames.Vary] = new string[] { "Accept-Encoding" };
+    
+    await next();
+});
 
 app.UseSerilogRequestLogging();
 
