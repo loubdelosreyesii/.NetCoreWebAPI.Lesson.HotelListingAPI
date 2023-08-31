@@ -15,7 +15,9 @@ using HotelListingAPI.Exceptions;
 namespace HotelListingAPI.Controllers
 {
     [Route("api/[controller]")]
+    //[Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class CountriesController : ControllerBase
     {
         //this is the copy of your database.
