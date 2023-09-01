@@ -1,8 +1,8 @@
-using HotelListingAPI.Configurations;
-using HotelListingAPI.Contracts;
-using HotelListingAPI.Data;
-using HotelListingAPI.Middleware;
-using HotelListingAPI.Repositories;
+using HotelListing.API.Core.Configurations;
+using HotelListing.API.Core.Contracts;
+using HotelListing.API.Data;
+using HotelListing.API.Core.Middleware;
+using HotelListing.API.Core.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -53,7 +53,7 @@ builder.Services.AddScoped<IAuthManager, AuthManager>();
 //3. Use IdentityUser or customer UserClass in the AddIdentityCore<>
 builder.Services.AddIdentityCore<ApiUser>()
     .AddRoles<IdentityRole>()
-    .AddTokenProvider<DataProtectorTokenProvider<ApiUser>>("HotelListingApi")
+    .AddTokenProvider<DataProtectorTokenProvider<ApiUser>>("HotelListing.API.Core")
     .AddEntityFrameworkStores<HotelListingDbContext>()
     .AddDefaultTokenProviders();
 //

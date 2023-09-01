@@ -5,16 +5,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using HotelListingAPI.Data;
-using HotelListingAPI.Models.Country;
+using HotelListing.API.Data;
+using HotelListing.API.Core.Models.Country;
 using AutoMapper;
-using HotelListingAPI.Contracts;
+using HotelListing.API.Core.Contracts;
 using Microsoft.AspNetCore.Authorization;
-using HotelListingAPI.Exceptions;
-using HotelListingAPI.Models;
+using HotelListing.API.Core.Exceptions;
+using HotelListing.API.Core.Models;
 using Microsoft.AspNetCore.OData.Query;
 
-namespace HotelListingAPI.Controllers
+namespace HotelListing.API.Core.Controllers
 {
     [Route("api/[controller]")]
     //[Route("api/v{version:apiVersion}/[controller]")]

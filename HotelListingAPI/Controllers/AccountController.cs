@@ -1,10 +1,10 @@
-﻿using HotelListingAPI.Contracts;
-using HotelListingAPI.Models.User;
+﻿using HotelListing.API.Core.Contracts;
+using HotelListing.API.Core.Models.User;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace HotelListingAPI.Controllers
+namespace HotelListing.API.Core.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
