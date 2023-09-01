@@ -6,7 +6,7 @@ namespace HotelListing.API.Core.Contracts
     {
         Task<T> GetAsync(int? id);
 
-        Task<List<TResult?>> GetAllAsync<TResult>(int? id);
+        Task<TResult> GetAsync<TResult>(int? id);
 
         Task<List<T>> GetAllAsync();
 
