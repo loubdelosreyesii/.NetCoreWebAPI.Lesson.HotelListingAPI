@@ -11,13 +11,13 @@ using AutoMapper;
 using HotelListingAPI.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using HotelListingAPI.Exceptions;
+using HotelListingAPI.Models;
 
 namespace HotelListingAPI.Controllers
 {
     [Route("api/[controller]")]
     //[Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [ApiVersion("1.0")]
     public class CountriesController : ControllerBase
     {
         //this is the copy of your database.
@@ -34,7 +34,7 @@ namespace HotelListingAPI.Controllers
         }
 
         // GET: api/Countries
-        [HttpGet]
+        [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<GetCountryDto>>> GetCountries()
         {
             var countries = await _countriesRepository.GetAllAsync();
