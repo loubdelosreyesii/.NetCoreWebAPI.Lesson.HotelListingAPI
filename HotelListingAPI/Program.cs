@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.AspNetCore.OData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.IdentityModel.Tokens;
@@ -25,7 +26,6 @@ builder.Services.AddDbContext<HotelListingDbContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-builder.Services.AddControllers();  
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -100,6 +100,11 @@ builder.Services.AddResponseCaching(options =>
 {
     options.MaximumBodySize = 1024; //largest cacheable to be allowed.
     options.UseCaseSensitivePaths = true; //if somebody request
+});
+
+builder.Services.AddControllers().AddOData(options => 
+{
+    options.Select().Filter().OrderBy();
 });
 
 var app = builder.Build();
