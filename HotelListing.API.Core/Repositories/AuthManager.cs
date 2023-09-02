@@ -21,7 +21,7 @@ namespace HotelListing.API.Core.Repositories
         private readonly ILogger<AuthManager> _logger;
         private ApiUser _user;
 
-        private const string _loginProvider = "HotelListing.API";
+        private const string _loginProvider = "HotelListingAPI";
         private const string _refreshToken = "RefreshToken";
 
         public AuthManager(IMapper mapper, UserManager<ApiUser> userManager,IConfiguration configuration,ILogger<AuthManager> logger)

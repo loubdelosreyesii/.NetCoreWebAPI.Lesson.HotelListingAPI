@@ -14,6 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Serilog;
 using System.Text;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,38 @@ builder.Services.AddDbContext<HotelListingDbContext>(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options => {
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Hotel Listing API", Version = "v1.0" });
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description =  @"JWT Authorization header using the Beared scheme.
+                        Enter 'Bearer' [space] and then your token in the text input below.
+                        Example: 'Bearer 12345asdyhw",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference{ 
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                                },
+                Scheme = "0auth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header
+            },
+            new List<string>()
+        }
+    });
+});
+
+
 
 builder.Services.AddCors(
     options => {
@@ -53,7 +85,7 @@ builder.Services.AddScoped<IAuthManager, AuthManager>();
 //3. Use IdentityUser or customer UserClass in the AddIdentityCore<>
 builder.Services.AddIdentityCore<ApiUser>()
     .AddRoles<IdentityRole>()
-    .AddTokenProvider<DataProtectorTokenProvider<ApiUser>>("HotelListing.API.Core")
+    .AddTokenProvider<DataProtectorTokenProvider<ApiUser>>("HotelListingAPI")
     .AddEntityFrameworkStores<HotelListingDbContext>()
     .AddDefaultTokenProviders();
 //
@@ -74,7 +106,6 @@ builder.Services.AddVersionedApiExplorer(options =>
     options.GroupNameFormat = "'v'VVV";
     options.SubstituteApiVersionInUrl = true;
 });
-
 
 builder.Services.AddAuthentication(options =>
 {

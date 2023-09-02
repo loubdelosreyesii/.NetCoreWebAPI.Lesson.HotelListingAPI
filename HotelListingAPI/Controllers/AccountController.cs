@@ -53,9 +53,10 @@ namespace HotelListing.API.Core.Controllers
         //FromBody : param should be expected in the body parameters only.
         public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
         {
-            _logger.LogInformation($"Login Attempty for {loginDto.Email}");
+            _logger.LogInformation($"Login Attempt for {loginDto.Email}");
 
             var authResponse = await _authManager.Login(loginDto);
+
 
             if (authResponse == null)
             { 
